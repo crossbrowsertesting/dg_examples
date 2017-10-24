@@ -67,14 +67,14 @@ class TodoAppTest(unittest.TestCase):
 
             # if I entered the text, the following element should contain that text
             span_text = self.driver.find_element_by_xpath('/html/body/div/div/div/ul/li[6]/span').text
-            self.assertEqual('Run your firrst Selenium Test', span_text)
+            self.assertEqual('Run your first Selenium Test', span_text)
 
             # if my archive link works, my checked elements should be archived
             print('Archiving old todos')
             self.driver.find_element_by_link_text('archive').click()
 
             elems = self.driver.find_elements_by_class_name('done-false')
-            self.assertEqual(4, len(elems))
+            self.assertEqual(9, len(elems))
 
             snapshot_hash = self.api_session.post('https://crossbrowsertesting.com/api/v3/selenium/' + self.driver.session_id + '/snapshots').json()['hash']
 
@@ -84,8 +84,6 @@ class TodoAppTest(unittest.TestCase):
 
         except AssertionError as e:
             # log the error message, and set the score to "during tearDown()".
-            self.api_session.put('https://crossbrowsertesting.com/api/v3/selenium/' + self.driver.session_id + '/snapshots/' + snapshot_hash,
-                data={'description':"AssertionError: " + str(e)})
             self.test_result = 'fail'
             raise
 
